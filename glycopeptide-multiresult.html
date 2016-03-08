@@ -1,0 +1,63 @@
+<!-- Imports polymer -->
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../glycopeptide-heatmap/glycopeptide-heatmap.html">
+
+
+<!-- Defines element markup -->
+<dom-module id="glycopeptide-multitab">
+    <template>
+        <style>
+            paper-menu{
+                float: left;
+                width: 25%;
+                max-length: 800px;
+                overflow-scrolling: auto;
+            }
+            paper-item{
+                --paper-item:{
+                    white-space: nowrap;
+                };
+            }
+            .iron-selected {
+                border-left: medium solid #ff0000;
+                font-size: 200%;
+            }
+            #heatmap{
+                position: fixed;
+            }
+        </style>
+    <paper-menu class="list" id="resultsMenu" selected="{{selected}}">
+        <template is="dom-repeat" items="{{charts}}">
+            <paper-item label$="{{item.mass}}">
+                {{item.mass}}
+            </paper-item>
+        </template>
+    </paper-menu>
+        <glycopeptide-heatmap id="heatmap" data={{charts.selected.data}}>
+        </glycopeptide-heatmap>
+    </template>
+
+    <!-- Registers custom element -->
+    <script>
+    Polymer({
+        is: 'glycopeptide-multitab',
+        properties:{
+            chartDatasets: Array,
+            selected: {
+                type: String,
+                observer: '_dataChanged'
+            }
+        },
+        ready: function() {
+            this.charts = this.chartDatasets;
+            this.selected = 0;
+        },
+        _dataChanged: function(newValue) {
+            var  chart = this.$.heatmap;
+            chart.data = this.charts[newValue].data;
+        }
+    });
+    </script>
+</dom-module>
