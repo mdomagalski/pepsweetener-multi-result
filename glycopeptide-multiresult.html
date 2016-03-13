@@ -1,6 +1,8 @@
 <!-- Imports polymer -->
-<link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../paper-fab/paper-fab.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../glycopeptide-heatmap/glycopeptide-heatmap.html">
 
@@ -12,14 +14,28 @@
         <style>
             paper-menu{
                 float: left;
-                width: 25%;
-                max-length: 800px;
+                width: 20%;
+                max-length: 200px;
+                margin-top: 10px;
+                overflow: auto;
                 overflow-scrolling: auto;
             }
             paper-item{
                 --paper-item:{
                     white-space: nowrap;
                 };
+            }
+            paper-item[disabled]{
+                background-color: #fafafa;
+            }
+            paper-fab {
+                padding: 10px;
+            }
+            paper-fab.green{
+                background-color: #0b8043;
+            }
+            paper-fab.red{
+                background-color: #ff0000;
             }
             .iron-selected {
                 border-left: medium solid #ff0000;
@@ -28,15 +44,21 @@
             #heatmap{
                 position: fixed;
             }
+            .hidden {
+                display: none;
+            }
         </style>
-    <paper-menu class="list" id="resultsMenu" selected="{{selected}}">
-        <template is="dom-repeat" items="{{charts}}">
-            <paper-item label$="{{item.mass}}">
-                {{item.mass}}
+    <paper-menu class="list" id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
+        <template is="dom-repeat" items="{{masses}}">
+            <paper-item label="{{item}}" id="tab-{{item}}" value="{{item}}" disabled>
+                <paper-spinner alt="Loading {{item}}" active></paper-spinner>
+                <paper-fab id="fab-{{item}}" mini icon="done" class="green hidden"></paper-fab>
+                <paper-fab mini icon="cancel" class="red hidden"></paper-fab>
+                &nbsp;&nbsp;&nbsp;{{item}}
             </paper-item>
         </template>
     </paper-menu>
-        <glycopeptide-heatmap id="heatmap" data={{charts.selected.data}}>
+        <glycopeptide-heatmap id="heatmap" data={{datasets.selected}}>
         </glycopeptide-heatmap>
     </template>
 
@@ -46,19 +68,26 @@
         is: 'glycopeptide-multiresult',
 
         properties:{
-            chartDatasets: Array,
+            masses: Array,
+            datasets: {
+                type: Array,
+                value: {}
+            },
             selected: {
                 type: String,
-                observer: '_dataChanged'
+                observer: '_datasetSelected'
             }
         },
-        ready: function() {
-            this.charts = this.chartDatasets;
-            this.selected = 0;
+        newDataset: function (d){
+            this.datasets[d.mass] = d.data;
+            var tab = Polymer.dom(this.root).querySelector('#tab-'+ d.mass);
+            tab.querySelector('paper-spinner').remove();
+            tab.querySelector('#fab-'+d.mass).setAttribute('class','');
+            tab.disabled = false;
         },
-        _dataChanged: function(newValue) {
+        _datasetSelected: function(newValue) {
             var  chart = this.$.heatmap;
-            chart.data = this.charts[newValue].data;
+            chart.data = this.datasets[newValue];
         }
     });
     </script>
