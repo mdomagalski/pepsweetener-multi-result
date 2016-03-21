@@ -12,54 +12,66 @@
 
     <template>
         <style>
-            paper-menu{
-                float: left;
-                width: 20%;
-                max-length: 200px;
-                margin-top: 10px;
-                overflow: auto;
-                overflow-scrolling: auto;
-            }
-            paper-item{
+            :root {
+                display: flex;
+                --paper-card: {
+                    flex: 1;
+                    width: 85%;
+                };
+                --paper-menu: {
+                    min-width: 200px;
+                    width: 14%;
+                    float: left;
+                    padding-left: 1.5rem;
+                    padding-right: 1.5rem;
+                    margin-top: 10px;
+                };
                 --paper-item:{
                     white-space: nowrap;
                 };
+                --paper-fab: {
+                    padding: 10px;
+                };
+                .red::shadow --paper-fab: {
+                    --paper-fab-background: #ff0000;
+                };
+
+            }
+            paper-fab.green {
+                --paper-fab-background: var(--paper-green-500);
+                --paper-fab-keyboard-focus-background: var(--paper-green-900);
             }
             paper-item[disabled]{
                 background-color: #fafafa;
             }
-            paper-fab {
-                padding: 10px;
-            }
-            paper-fab.green{
-                background-color: #0b8043;
-            }
-            paper-fab.red{
-                background-color: #ff0000;
+            .hidden {
+                display: none;
             }
             .iron-selected {
-                border-left: medium solid #ff0000;
+                border-left: thick solid #ff0000;
                 font-size: 200%;
             }
             #heatmap{
-                position: fixed;
-            }
-            .hidden {
-                display: none;
+                display: inline-block;
             }
         </style>
     <paper-menu class="list" id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
         <template is="dom-repeat" items="{{masses}}">
             <paper-item label="{{item}}" id="tab-{{item}}" value="{{item}}" disabled>
                 <paper-spinner alt="Loading {{item}}" active></paper-spinner>
-                <paper-fab id="fab-{{item}}" mini icon="done" class="green hidden"></paper-fab>
-                <paper-fab mini icon="cancel" class="red hidden"></paper-fab>
-                &nbsp;&nbsp;&nbsp;{{item}}
+                <paper-fab mini icon="done" id="success" class="green hidden"></paper-fab>
+                <paper-fab mini icon="cancel" id="fail" class="red hidden"></paper-fab>
+                &nbsp;{{item}}
+                <iron-icon icon="chevron-right" class="hidden">
             </paper-item>
         </template>
     </paper-menu>
-        <glycopeptide-heatmap id="heatmap" data={{datasets.selected}}>
-        </glycopeptide-heatmap>
+    <paper-card elevation="0">
+        <div class="card-content">
+            <glycopeptide-heatmap id="heatmap" data={{datasets.selected}}>
+            </glycopeptide-heatmap>
+        </div>
+    </paper-card>
     </template>
 
     <!-- Registers custom element -->
@@ -74,15 +86,21 @@
                 value: {}
             },
             selected: {
-                type: String,
+                type: Number,
                 observer: '_datasetSelected'
             }
         },
         newDataset: function (d){
             this.datasets[d.mass] = d.data;
-            var tab = Polymer.dom(this.root).querySelector('#tab-'+ d.mass);
+            var tab = this.$.resultsMenu.getElementsByTagName('paper-item')[this.masses.indexOf(d.mass)];
             tab.querySelector('paper-spinner').remove();
-            tab.querySelector('#fab-'+d.mass).setAttribute('class','');
+            if(this.datasets[d.mass]['map'].length>0){
+                //tab.querySelector('paper-fab#success').setAttribute('class','green');
+                tab.querySelector('paper-fab#fail').remove();
+            }else{
+                //tab.querySelector('paper-fab#fail').setAttribute('class','red');
+                tab.querySelector('paper-fab#success').remove();
+            }
             tab.disabled = false;
         },
         _datasetSelected: function(newValue) {
