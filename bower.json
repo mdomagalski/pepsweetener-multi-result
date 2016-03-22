@@ -1,9 +1,9 @@
 {
-  "name": "glycopeptide-multiresult",
+  "name": "glycopeptide-multi-result",
   "version": "0.0.1",
   "description": "Multiple heatmaps on vertical tab element",
   "license": "MIT",
-  "main": "glycopeptide-multiresult.html",
+  "main": "glycopeptide-multi-result.html",
   "keywords": [
     "polymer",
     "web-components"
