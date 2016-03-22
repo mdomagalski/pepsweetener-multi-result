@@ -16,7 +16,7 @@
     "polymer": "Polymer/polymer#^1.0.0",
     "paper-menu": "PolymerElements/paper-menu#^1.2.2",
     "paper-item": "PolymerElements/paper-item#^1.1.4",
-    "glycopeptide-heatmap": "https://mdomagalski@bitbucket.org/mdomagalski/glycopeptide-heatmap.git",
+    "glycopeptide-heatmap": "https://mdomagalski@bitbucket.org/sib-pig/glycopeptide-heatmap.git",
     "iron-pages": "PolymerElements/iron-pages#^1.0.7"
   }
 }
