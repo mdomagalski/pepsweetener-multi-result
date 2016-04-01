@@ -19,6 +19,7 @@
     "glycopeptide-heatmap": "https://mdomagalski@bitbucket.org/sib-pig/glycopeptide-heatmap.git",
     "iron-pages": "PolymerElements/iron-pages#^1.0.7",
     "paper-fab": "PolymerElements/paper-fab#^1.2.0",
-    "paper-spinner": "PolymerElements/paper-spinner#^1.1.1"
+    "paper-spinner": "PolymerElements/paper-spinner#^1.1.1",
+    "iron-icons": "PolymerElements/iron-icons#^1.1.3"
   }
 }

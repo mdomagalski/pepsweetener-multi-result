@@ -4,6 +4,7 @@
 <link rel="import" href="../paper-spinner/paper-spinner.html">
 <link rel="import" href="../paper-fab/paper-fab.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../glycopeptide-heatmap/glycopeptide-heatmap.html">
 
 
@@ -26,43 +27,48 @@
                     padding-right: 1.5rem;
                     margin-top: 10px;
                 };
-                --paper-item:{
-                    white-space: nowrap;
-                };
-                --paper-fab: {
-                    padding: 10px;
-                };
-                .red::shadow --paper-fab: {
-                    --paper-fab-background: #ff0000;
-                };
 
             }
+
+            paper-item {
+                white-space: nowrap;
+            }
+
+            paper-fab {
+                margin-right: 12px;
+            }
+
             paper-fab.green {
                 --paper-fab-background: var(--paper-green-500);
                 --paper-fab-keyboard-focus-background: var(--paper-green-900);
             }
-            paper-item[disabled]{
-                background-color: #fafafa;
+
+            paper-fab.red {
+                --paper-fab-background: var(--paper-red-500);
+                --paper-fab-keyboard-focus-background: var(--paper-red-900);
             }
-            .hidden {
+
+            paper-fab[disabled]{
                 display: none;
             }
-            .iron-selected {
+
+            paper-item.iron-selected {
                 border-left: thick solid #ff0000;
-                font-size: 200%;
+                font-size: 150%;
             }
-            #heatmap{
+
+            glycopeptide-heatmap {
                 display: inline-block;
             }
         </style>
-    <paper-menu class="list" id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
+    <paper-menu id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
         <template id="menu" is="dom-repeat" items="{{masses}}">
-            <paper-item id="tab{{index}}" value="{{item}}" disabled>
+            <paper-item id="tab{{index}}" value="{{item}}" role="menuItem">
                 <paper-spinner id="spinner{{index}}" alt="Loading {{item}}" active></paper-spinner>
-                <paper-fab mini icon="done" id="success" class="green hidden"></paper-fab>
-                <paper-fab mini icon="cancel" id="fail" class="red hidden"></paper-fab>
-                &nbsp;{{item}}
-                <iron-icon icon="chevron-right" class="hidden"></iron-icon>
+                <paper-fab mini icon="done" id="success{{index}}" class="green" active></paper-fab>
+                <paper-fab mini icon="clear" id="fail{{index}}" class="red" active></paper-fab>
+                {{item}}
+                <iron-icon icon="chevron-right" active></iron-icon>
             </paper-item>
         </template>
     </paper-menu>
@@ -98,17 +104,14 @@
         },
         newDataset: function (d){
             this.datasets[d.mass] = d.data;
-            var tab = this.$$('#tab'+this.masses.indexOf(d.mass));
-            var spinner = this.$$('#spinner'+this.masses.indexOf(d.mass));
-            spinner.remove();
+            this.$$('#spinner'+this.masses.indexOf(d.mass)).setAttribute('class', 'hidden');
             if(this.datasets[d.mass]['map'].length>0){
-                tab.querySelector('paper-fab#success').setAttribute('class','green');
-                tab.querySelector('paper-fab#fail').remove();
+                this.$$('#success'+this.masses.indexOf(d.mass)).disabled = false;
+                this.$$('#fail'+this.masses.indexOf(d.mass)).disabled = true;
             }else{
-                tab.querySelector('paper-fab#fail').setAttribute('class','red');
-                tab.querySelector('paper-fab#success').remove();
+                this.$$('#fail'+this.masses.indexOf(d.mass)).disabled = false;
+                this.$$('#success'+this.masses.indexOf(d.mass)).disabled = true;
             }
-            tab.disabled = false;
             this.selected = this.masses.indexOf(d.mass);
         },
         _datasetSelected: function(newValue) {
