@@ -69,7 +69,7 @@ In order to run it locally you'll need to fetch some dependencies and a basic se
 
 ## History
 
-For detailed changelog, check [Releases](https://github.com/mdomagalski/glycopeptide-multi-result/releases).
+For detailed changelog, check [Releases](https://bitbucket.org/sib-pig/glycopeptide-multi-result/releases).
 
 ## License
 

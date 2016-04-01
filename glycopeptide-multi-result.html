@@ -56,13 +56,13 @@
             }
         </style>
     <paper-menu class="list" id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
-        <template is="dom-repeat" items="{{masses}}">
-            <paper-item label="{{item}}" id="tab-{{item}}" value="{{item}}" disabled>
-                <paper-spinner alt="Loading {{item}}" active></paper-spinner>
+        <template id="menu" is="dom-repeat" items="{{masses}}">
+            <paper-item id="tab{{index}}" value="{{item}}" disabled>
+                <paper-spinner id="spinner{{index}}" alt="Loading {{item}}" active></paper-spinner>
                 <paper-fab mini icon="done" id="success" class="green hidden"></paper-fab>
                 <paper-fab mini icon="cancel" id="fail" class="red hidden"></paper-fab>
                 &nbsp;{{item}}
-                <iron-icon icon="chevron-right" class="hidden">
+                <iron-icon icon="chevron-right" class="hidden"></iron-icon>
             </paper-item>
         </template>
     </paper-menu>
@@ -80,9 +80,12 @@
         is: 'glycopeptide-multi-result',
 
         properties:{
-            masses: Array,
-            datasets: {
+            masses: {
                 type: Array,
+                observer: '_renderMenu'
+            },
+            datasets: {
+                type: Object,
                 value: {}
             },
             selected: {
@@ -90,18 +93,23 @@
                 observer: '_datasetSelected'
             }
         },
+        _renderMenu: function () {
+            this.$.menu.render();
+        },
         newDataset: function (d){
             this.datasets[d.mass] = d.data;
-            var tab = this.$.resultsMenu.getElementsByTagName('paper-item')[this.masses.indexOf(d.mass)];
-            tab.querySelector('paper-spinner').remove();
+            var tab = this.$$('#tab'+this.masses.indexOf(d.mass));
+            var spinner = this.$$('#spinner'+this.masses.indexOf(d.mass));
+            spinner.remove();
             if(this.datasets[d.mass]['map'].length>0){
-                //tab.querySelector('paper-fab#success').setAttribute('class','green');
+                tab.querySelector('paper-fab#success').setAttribute('class','green');
                 tab.querySelector('paper-fab#fail').remove();
             }else{
-                //tab.querySelector('paper-fab#fail').setAttribute('class','red');
+                tab.querySelector('paper-fab#fail').setAttribute('class','red');
                 tab.querySelector('paper-fab#success').remove();
             }
             tab.disabled = false;
+            this.selected = this.masses.indexOf(d.mass);
         },
         _datasetSelected: function(newValue) {
             var  chart = this.$.heatmap;
