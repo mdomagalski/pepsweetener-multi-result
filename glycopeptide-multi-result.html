@@ -6,6 +6,7 @@
 <link rel="import" href="../iron-pages/iron-pages.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../glycopeptide-heatmap/glycopeptide-heatmap.html">
+<link rel="import" href="../glycopeptide-xml-exporter/glycopeptide-xml-exporter.html">
 
 
 <!-- Defines element markup -->
@@ -74,6 +75,7 @@
     </paper-menu>
     <paper-card elevation="0">
         <div class="card-content">
+            <glycopeptide-xml-exporter json="{{datasets}}" filename="glycopeptide-search-results.xml"></glycopeptide-xml-exporter>
             <glycopeptide-heatmap id="heatmap" data={{datasets.selected}}>
             </glycopeptide-heatmap>
         </div>
@@ -92,7 +94,9 @@
             },
             datasets: {
                 type: Object,
-                value: {}
+                value: {},
+                notify: true,
+                readOnly: true
             },
             selected: {
                 type: Number,
