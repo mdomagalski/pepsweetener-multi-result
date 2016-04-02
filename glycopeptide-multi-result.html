@@ -72,10 +72,10 @@
                 <iron-icon icon="chevron-right" active></iron-icon>
             </paper-item>
         </template>
+        <glycopeptide-xml-exporter id="xmlOutput"></glycopeptide-xml-exporter>
     </paper-menu>
     <paper-card elevation="0">
         <div class="card-content">
-            <glycopeptide-xml-exporter json="{{datasets}}" filename="glycopeptide-search-results.xml"></glycopeptide-xml-exporter>
             <glycopeptide-heatmap id="heatmap" data={{datasets.selected}}>
             </glycopeptide-heatmap>
         </div>
@@ -92,12 +92,7 @@
                 type: Array,
                 observer: '_renderMenu'
             },
-            datasets: {
-                type: Object,
-                value: {},
-                notify: true,
-                readOnly: true
-            },
+            datasets: Object,
             selected: {
                 type: Number,
                 observer: '_datasetSelected'
@@ -116,6 +111,7 @@
                 this.$$('#fail'+this.masses.indexOf(d.mass)).disabled = false;
                 this.$$('#success'+this.masses.indexOf(d.mass)).disabled = true;
             }
+            this.$.xmlOutput.json = this.datasets;
             this.selected = this.masses.indexOf(d.mass);
         },
         _datasetSelected: function(newValue) {
