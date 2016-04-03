@@ -66,8 +66,8 @@
         <template id="menu" is="dom-repeat" items="{{masses}}">
             <paper-item id="tab{{index}}" value="{{item}}" role="menuItem">
                 <paper-spinner id="spinner{{index}}" alt="Loading {{item}}" active></paper-spinner>
-                <paper-fab mini icon="done" id="success{{index}}" class="green" active></paper-fab>
-                <paper-fab mini icon="clear" id="fail{{index}}" class="red" active></paper-fab>
+                <paper-fab mini icon="done" id="success{{index}}" class="green" disabled></paper-fab>
+                <paper-fab mini icon="clear" id="fail{{index}}" class="red" disabled></paper-fab>
                 {{item}}
                 <iron-icon icon="chevron-right" active></iron-icon>
             </paper-item>
@@ -112,7 +112,7 @@
                 this.$$('#success'+this.masses.indexOf(d.mass)).disabled = true;
             }
             this.$.xmlOutput.json = this.datasets;
-            this.selected = this.masses.indexOf(d.mass);
+            this.$.resultsMenu.selected = d.mass;
         },
         _datasetSelected: function(newValue) {
             var  chart = this.$.heatmap;
