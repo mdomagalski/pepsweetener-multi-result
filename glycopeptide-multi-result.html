@@ -62,62 +62,61 @@
                 display: inline-block;
             }
         </style>
-    <paper-menu id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
-        <template id="menu" is="dom-repeat" items="{{masses}}">
-            <paper-item id="tab{{index}}" value="{{item}}" role="menuItem">
-                <paper-spinner id="spinner{{index}}" alt="Loading {{item}}" active></paper-spinner>
-                <paper-fab mini icon="done" id="success{{index}}" class="green" disabled></paper-fab>
-                <paper-fab mini icon="clear" id="fail{{index}}" class="red" disabled></paper-fab>
-                {{item}}
-                <iron-icon icon="chevron-right" active></iron-icon>
-            </paper-item>
-        </template>
-        <glycopeptide-xml-exporter id="xmlOutput"></glycopeptide-xml-exporter>
-    </paper-menu>
-    <paper-card elevation="0">
-        <div class="card-content">
-            <glycopeptide-heatmap id="heatmap" data={{datasets.selected}}>
-            </glycopeptide-heatmap>
-        </div>
-    </paper-card>
+        <paper-menu id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
+            <template id="menu" is="dom-repeat" items="{{masses}}">
+                <paper-item id="tab{{index}}" value="{{item}}" role="menuItem">
+                    <paper-spinner id="spinner{{index}}" alt="Loading {{item}}" active></paper-spinner>
+                    <paper-fab mini icon="done" id="success{{index}}" class="green" disabled></paper-fab>
+                    <paper-fab mini icon="clear" id="fail{{index}}" class="red" disabled></paper-fab>
+                    {{item}}
+                    <iron-icon icon="chevron-right" active></iron-icon>
+                </paper-item>
+            </template>
+            <glycopeptide-xml-exporter id="xmlOutput"></glycopeptide-xml-exporter>
+        </paper-menu>
+        <paper-card elevation="0">
+            <div class="card-content">
+                <glycopeptide-heatmap data={{datasets.selected}}></glycopeptide-heatmap>
+            </div>
+        </paper-card>
     </template>
 
     <!-- Registers custom element -->
     <script>
-    Polymer({
-        is: 'glycopeptide-multi-result',
+        Polymer({
+            is: 'glycopeptide-multi-result',
 
-        properties:{
-            masses: {
-                type: Array,
-                observer: '_renderMenu'
+            properties:{
+                masses: {
+                    type: Array,
+                    observer: '_renderMenu'
+                },
+                datasets: Object,
+                selected: {
+                    type: Number,
+                    observer: '_datasetSelected'
+                }
             },
-            datasets: Object,
-            selected: {
-                type: Number,
-                observer: '_datasetSelected'
+            _renderMenu: function () {
+                this.$.menu.render();
+            },
+            newDataset: function (d){
+                this.datasets[d.mass] = d.data;
+                this.$$('#spinner'+this.masses.indexOf(d.mass)).setAttribute('class', 'hidden');
+                if(this.datasets[d.mass]['map'].length>0){
+                    this.$$('#success'+this.masses.indexOf(d.mass)).disabled = false;
+                    this.$$('#fail'+this.masses.indexOf(d.mass)).disabled = true;
+                }else{
+                    this.$$('#fail'+this.masses.indexOf(d.mass)).disabled = false;
+                    this.$$('#success'+this.masses.indexOf(d.mass)).disabled = true;
+                }
+                this.$.xmlOutput.json = this.datasets;
+                this.$.resultsMenu.selected = d.mass;
+            },
+            _datasetSelected: function(newValue) {
+                var chart = this.$$('glycopeptide-heatmap');
+                chart.data = this.datasets[newValue];
             }
-        },
-        _renderMenu: function () {
-            this.$.menu.render();
-        },
-        newDataset: function (d){
-            this.datasets[d.mass] = d.data;
-            this.$$('#spinner'+this.masses.indexOf(d.mass)).setAttribute('class', 'hidden');
-            if(this.datasets[d.mass]['map'].length>0){
-                this.$$('#success'+this.masses.indexOf(d.mass)).disabled = false;
-                this.$$('#fail'+this.masses.indexOf(d.mass)).disabled = true;
-            }else{
-                this.$$('#fail'+this.masses.indexOf(d.mass)).disabled = false;
-                this.$$('#success'+this.masses.indexOf(d.mass)).disabled = true;
-            }
-            this.$.xmlOutput.json = this.datasets;
-            this.$.resultsMenu.selected = d.mass;
-        },
-        _datasetSelected: function(newValue) {
-            var  chart = this.$.heatmap;
-            chart.data = this.datasets[newValue];
-        }
-    });
+        });
     </script>
 </dom-module>
