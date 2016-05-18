@@ -111,7 +111,8 @@
                     this.$$('#success'+this.masses.indexOf(d.mass)).disabled = true;
                 }
                 this.$.xmlOutput.json = this.datasets;
-                this.$.resultsMenu.selected = d.mass;
+                var chart = this.$$('glycopeptide-heatmap');
+                chart.data = this.datasets[d.mass];
             },
             _datasetSelected: function(newValue) {
                 var chart = this.$$('glycopeptide-heatmap');
