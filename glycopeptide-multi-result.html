@@ -61,7 +61,7 @@
             glycopeptide-heatmap {
                 display: inline-block;
             }
-            glycopeptide-xml-exporter.glycopeptide-xml-exporter {
+            #xmlOutputContainer {
                 margin-top: 20px;
             }
         </style>
@@ -75,7 +75,9 @@
                     <iron-icon icon="chevron-right" active></iron-icon>
                 </paper-item>
             </template>
-            <glycopeptide-xml-exporter id="xmlOutput"></glycopeptide-xml-exporter>
+            <div id="xmlOutputContainer">
+                <glycopeptide-xml-exporter id="xmlOutput"></glycopeptide-xml-exporter>
+            </div>
         </paper-menu>
         <paper-card elevation="0">
             <div class="card-content">
