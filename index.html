@@ -3,7 +3,7 @@
 <head>
 
     <meta charset="utf-8">
-    <title>&lt;my-repo&gt;</title>
+    <title>glycopeptide-multi-result test</title>
 
     <!-- Imports polyfill -->
     <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
@@ -16,38 +16,50 @@
 <body>
 
     <!-- Runs custom element -->
-    <glycopeptide-multi-result chart-datasets='
-    [{"mass" : "3234.54",
-      "data" : {
-        "map": [
-          {"peptide": 1, "glycan": 2, "value": 0.1, "mass": 3000},
-          {"peptide": 2, "glycan": 1, "value": 0.2, "mass": 3001},
-          {"peptide": 3, "glycan": 3, "value": 0.3, "mass": 3002},
-          {"peptide": 5, "glycan": 4, "value": 0.4, "mass": 3003},
-          {"peptide": 6, "glycan": 6, "value": 0.6, "mass": 3005}],
-        "peptides": ["peptide-1", "peptide-3", "peptide-2", "peptide-4", "peptide-5", "peptide-6"],
-        "glycans": ["glycan-1", "glycan-3", "glycan-2", "glycan-6", "glycan-4", "glycan-5"]}},
-      {"mass" : "3245.54",
-      "data" : {
-        "map": [{"peptide": 1, "glycan": 1, "value": 0.3, "mass": 4003},
-          {"peptide": 2, "glycan": 3, "value": 0.2, "mass": 4001},
-          {"peptide": 4, "glycan": 2, "value": 0.3, "mass": 4002},
-          {"peptide": 3, "glycan": 5, "value": 0.4, "mass": 4003},
-          {"peptide": 3, "glycan": 4, "value": 0.6, "mass": 4005}],
-        "peptides": ["peptide-7", "peptide-8", "peptide-9", "peptide-10", "peptide-11", "peptide-12"],
-        "glycans": ["glycan-7", "glycan-8", "glycan-9", "glycan-10", "glycan-11", "glycan-12"]}},
-      {"mass" : "3256.54",
-      "data" : {
-        "map": [{"peptide": 1, "glycan": 1, "value": 0.1, "mass": 3000},
-          {"peptide": 2, "glycan": 2, "value": 0.2, "mass": 3501},
-          {"peptide": 3, "glycan": 4, "value": 0.3, "mass": 3502},
-          {"peptide": 4, "glycan": 5, "value": 0.4, "mass": 3503},
-          {"peptide": 5, "glycan": 3, "value": 0.6, "mass": 3505},
-          {"peptide": 6, "glycan": 6, "value": 0.7, "mass": 3506},
-          {"peptide": 7, "glycan": 7, "value": 0.8, "mass": 3508}],
-        "peptides": ["peptide-15", "peptide-14", "peptide-13", "peptide-16", "peptide-18", "peptide-17", "peptide-19"],
-        "glycans": ["glycan-14", "glycan-13", "glycan-15", "glycan-19", "glycan-17", "glycan-18", "glycan-16"]}}]'>
+    <glycopeptide-multi-result>
     </glycopeptide-multi-result>
-
+    <script>
+        var masses = ["3234.54","3245.54","3256.54","1600.60", "9999.99"];
+        var datasets =
+            [{"mass" : "3234.54",
+            "data" : {
+                "map": [
+                    {"peptide": 1, "glycan": 2, "value": 0.1, "mass": 3000},
+                    {"peptide": 2, "glycan": 1, "value": 0.2, "mass": 3001},
+                    {"peptide": 3, "glycan": 3, "value": 0.3, "mass": 3002},
+                    {"peptide": 4, "glycan": 4, "value": 0.3, "mass": 3002},
+                    {"peptide": 5, "glycan": 4, "value": 0.4, "mass": 3003},
+                    {"peptide": 6, "glycan": 5, "value": 0.6, "mass": 3005}],
+                "peptides": ["GGDEYDNHCGK", "DSCNDSFR", "CNDSFR", "VVWNGSR", "DEAGENYSK", "GDQNRTSK"],
+                "glycans": ["HexNAc:2", "Hex:1|dHex:2|HexNAc:1", "NeuGc:2|HexNAc:1", "Hex:2|HexA:1|S:1|HexNAc:1", "Hex:2|Pen:2"]}},
+        {"mass" : "3245.54",
+            "data" : {
+                "map": [
+                    {"peptide": 1, "glycan": 1, "value": 0.3, "mass": 4003},
+                    {"peptide": 2, "glycan": 3, "value": 0.2, "mass": 4001},
+                    {"peptide": 4, "glycan": 2, "value": 0.3, "mass": 4002},
+                    {"peptide": 3, "glycan": 5, "value": 0.4, "mass": 4003},
+                    {"peptide": 3, "glycan": 4, "value": 0.6, "mass": 4005}],
+                "peptides": ["GGDEYDNHCGK", "DSCNDSFR", "VVWNGSR", "GDQNRTSK"],
+                "glycans": ["HexNAc:2", "Hex:2|HexA:1|S:1|HexNAc:1", "Hex:1|dHex:2|HexNAc:1", "Hex:2|Pen:2", "Hex:1|S:1|Kdn:1|HexNAc:1", "NeuGc:2|HexNAc:1"]}},
+        {"mass" : "3256.54",
+            "data" : {
+                "map": [{"peptide": 1, "glycan": 1, "value": 0.1, "mass": 3000},
+                    {"peptide": 2, "glycan": 2, "value": 0.2, "mass": 3501},
+                    {"peptide": 3, "glycan": 4, "value": 0.3, "mass": 3502},
+                    {"peptide": 4, "glycan": 5, "value": 0.4, "mass": 3503},
+                    {"peptide": 5, "glycan": 3, "value": 0.6, "mass": 3505},
+                    {"peptide": 6, "glycan": 6, "value": 0.7, "mass": 3506},
+                    {"peptide": 7, "glycan": 7, "value": 0.8, "mass": 3508}],
+                "peptides": ["DYNSSR", "NSSEEK", "MNGSMDK", "VVWNGSR", "DEAGENYSK", "ANCSNFK", "DSCNDSFR"],
+                "glycans": ["Hex:2|Pen:2", "Hex:2|NeuGc:1|HexNAc:1", "Hex:1|NeuAc:1|HexNAc:2", "Hex:2|Pen:2", "Hex:1|dHex:1|NeuAc:1|HexNAc:2", "Hex:2|HexNAc:3", "Hex:2|HexA:1|S:1|HexNAc:1"]}},
+        {"mass" : "1600.60",
+            "data" : {"map":[]}}];
+        var el = document.querySelector("glycopeptide-multi-result");
+        el.masses=masses;
+        for(var i in datasets){
+            setTimeout(el.newDataset(datasets[i]),1000);
+        }
+    </script>
 </body>
 </html>
