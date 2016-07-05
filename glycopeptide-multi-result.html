@@ -31,22 +31,18 @@
                 --paper-badge:  {
                     font-weight: bold;
                 };
-
-            }
-
-            paper-item {
-                margin: 10px;
-                border: 1px dashed black;
-                display: inline-flex;
-                white-space: nowrap;
-            }
-
-            iron-icon {
-                margin-left: 5px;
-            }
-
-            paper-spinner {
-                margin-left: 5px;
+                --paper-item: {
+                    margin: 10px;
+                    border: 1px dashed black;
+                    display: inline-flex;
+                    white-space: nowrap;
+                };
+                --iron-icon: {
+                    margin-left: 5px;
+                };
+                --paper-spinner: {
+                    margin-left: 5px;
+                };
             }
 
             iron-icon.green {
@@ -146,6 +142,7 @@
             _datasetSelected: function(newValue) {
                 var chart = this.$$('glycopeptide-heatmap');
                 chart.data = this.datasets[newValue];
+                this.$.resultsMenu.selected = newValue;
             }
         });
     </script>
