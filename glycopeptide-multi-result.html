@@ -127,6 +127,7 @@
                 if(this.datasets[d.mass]['map'].length>0){
                     this.$$('#success'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
                     this.$$('#fail'+this.masses.indexOf(d.mass)).setAttribute('disabled', "true");
+                    this.$$('#badgeFail'+this.masses.indexOf(d.mass)).setAttribute('disabled', 'true');
                     this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).label = this.datasets[d.mass].map.length;
                     this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
                 }else{
