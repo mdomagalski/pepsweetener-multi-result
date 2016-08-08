@@ -1,0 +1,154 @@
+<!-- Imports polymer -->
+<link rel="import" href="../paper-menu/paper-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-spinner/paper-spinner.html">
+<link rel="import" href="../paper-badge/paper-badge.html">
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../pepsweetener-heatmap/pepsweetener-heatmap.html">
+<link rel="import" href="../glycopeptide-xml-exporter/glycopeptide-xml-exporter.html">
+
+
+<!-- Defines element markup -->
+<dom-module id="pepsweetener-multi-result">
+
+    <template>
+        <style>
+            :root {
+                display: inline-block;
+                --paper-card: {
+                    flex: 1;
+                    width: 85%;
+                };
+                --paper-menu: {
+                    padding-left: 1.5rem;
+                    padding-right: 2rem;
+                    margin-top: 10px;
+                };
+                --paper-badge-width: 30px;
+                --paper-badge-height: 30px;
+                --paper-badge-background: var(--paper-red-500);
+                --paper-badge:  {
+                    font-weight: bold;
+                };
+            }
+
+            paper-item.menuTab {
+                margin: 10px;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                box-shadow: 5px 5px 6px -1px rgba(0, 0, 0, 0.4);
+                display: inline-flex;
+                white-space: nowrap;
+            }
+
+            paper-item.iron-selected {
+                border-bottom: solid #ff0000;
+                font-size: 110%;
+                box-shadow: 3px 3px 6px 0px rgba(0, 0, 0, 0.4);
+            }
+
+            iron-icon {
+                margin-left: 5px;
+            }
+
+            iron-icon.green {
+                --iron-icon-fill-color: var(--paper-green-500);
+            }
+
+            iron-icon.red {
+                --iron-icon-fill-color: var(--paper-red-500);
+            }
+
+            iron-icon[disabled]{
+                display: none;
+            }
+
+            paper-badge.green {
+                --paper-badge-background: var(--paper-green-500);
+            }
+
+            paper-badge[disabled]{
+                display: none;
+            }
+
+            paper-spinner {
+                margin-left: 5px;
+            }
+
+            #xmlOutputContainer {
+                float: right;
+                margin-top: 15px;
+                display: inline-flex;
+            }
+        </style>
+        <paper-menu id="resultsMenu" selected="{{selected}}" attr-for-selected="value">
+            <template id="menu" is="dom-repeat" items="{{masses}}">
+                <paper-item id="tab{{index}}" class="menuTab" value="{{item}}" role="menuItem">
+                    <span>{{item}}</span>
+                    <paper-badge id="badgeFail{{index}}" label="0"></paper-badge>
+                    <paper-badge id="badgeSuccess{{index}}" label="0" class="green" disabled></paper-badge>
+                    <paper-spinner id="spinner{{index}}" alt="Loading {{item}}" active></paper-spinner>
+                    <iron-icon icon="done" id="success{{index}}" class="green" disabled></iron-icon>
+                    <iron-icon icon="clear" id="fail{{index}}" class="red" disabled></iron-icon>
+                </paper-item>
+            </template>
+            <div id="xmlOutputContainer">
+                <glycopeptide-xml-exporter id="xmlOutput"></glycopeptide-xml-exporter>
+            </div>
+        </paper-menu>
+        <paper-card elevation="0">
+            <div class="card-content">
+                <pepsweetener-heatmap data={{datasets.selected}}></pepsweetener-heatmap>
+            </div>
+        </paper-card>
+    </template>
+
+    <!-- Registers custom element -->
+    <script>
+        Polymer({
+            is: 'pepsweetener-multi-result',
+
+            properties:{
+                masses: {
+                    type: Array,
+                    observer: '_renderMenu'
+                },
+                datasets: {
+                    type: Object,
+                    value: {}
+                },
+                selected: {
+                    type: Number,
+                    observer: '_datasetSelected'
+                }
+            },
+            _renderMenu: function () {
+                this.$.menu.render();
+            },
+            newDataset: function (d){
+                this.datasets[d.mass] = d.data;
+                this.$$('#spinner'+this.masses.indexOf(d.mass)).setAttribute('class', 'hidden');
+                if(this.datasets[d.mass]['map'].length>0){
+                    this.$$('#success'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
+                    this.$$('#fail'+this.masses.indexOf(d.mass)).setAttribute('disabled', "true");
+                    this.$$('#badgeFail'+this.masses.indexOf(d.mass)).setAttribute('disabled', 'true');
+                    this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).label = this.datasets[d.mass].map.length;
+                    this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
+                }else{
+                    this.$$('#fail'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
+                    this.$$('#success'+this.masses.indexOf(d.mass)).setAttribute('disabled', "true");
+                    this.$$('#badgeFail'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
+                    this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).setAttribute('disabled', 'true');
+                }
+                this.$.xmlOutput.json = this.datasets;
+                var chart = this.$$('pepsweetener-heatmap');
+                chart.data = this.datasets[d.mass];
+                this.$.resultsMenu.selected = d.mass;
+            },
+            _datasetSelected: function(newValue) {
+                var chart = this.$$('pepsweetener-heatmap');
+                chart.data = this.datasets[newValue];
+            }
+        });
+    </script>
+</dom-module>

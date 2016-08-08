@@ -3,21 +3,29 @@
 <head>
 
     <meta charset="utf-8">
-    <title>glycopeptide-multi-result test</title>
-
-    <!-- Imports polyfill -->
-    <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
+    <title>pepsweetener-multi-result test</title>
 
     <!-- Imports custom element -->
-    <link rel="import" href="glycopeptide-multi-result.html">
+    <link rel="import" href="pepsweetener-multi-result.html">
 
 
 </head>
-<body>
+<body onload="(function() {
+        if ('registerElement' in document
+            && 'import' in document.createElement('link')
+            && 'content' in document.createElement('template')) {
+            // platform is good!
+        } else {
+            // polyfill the platform!
+            var e = document.createElement('script');
+            e.src = '../webcomponentsjs/webcomponents-lite.min.js';
+            document.body.appendChild(e);
+        }
+    })();">
 
     <!-- Runs custom element -->
-    <glycopeptide-multi-result>
-    </glycopeptide-multi-result>
+    <pepsweetener-multi-result>
+    </pepsweetener-multi-result>
     <script>
         var masses = ["3234.54","3245.54","3256.54","1600.60", "9999.99"];
         var datasets =
@@ -55,7 +63,7 @@
                 "glycans": ["Hex:2|Pen:2", "Hex:2|NeuGc:1|HexNAc:1", "Hex:1|NeuAc:1|HexNAc:2", "Hex:2|Pen:2", "Hex:1|dHex:1|NeuAc:1|HexNAc:2", "Hex:2|HexNAc:3", "Hex:2|HexA:1|S:1|HexNAc:1"]}},
         {"mass" : "1600.60",
             "data" : {"map":[]}}];
-        var el = document.querySelector("glycopeptide-multi-result");
+        var el = document.querySelector("pepsweetener-multi-result");
         el.masses=masses;
         for(var i in datasets){
             setTimeout(el.newDataset(datasets[i]),1000);
