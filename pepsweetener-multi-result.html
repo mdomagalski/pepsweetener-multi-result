@@ -63,10 +63,6 @@
                 display: none;
             }
 
-            paper-badge.green {
-                --paper-badge-background: var(--paper-green-500);
-            }
-
             paper-badge[disabled]{
                 display: none;
             }
@@ -85,8 +81,7 @@
             <template id="menu" is="dom-repeat" items="{{masses}}">
                 <paper-item id="tab{{index}}" class="menuTab" value="{{item}}" role="menuItem">
                     <span>{{item}}</span>
-                    <paper-badge id="badgeFail{{index}}" label="0"></paper-badge>
-                    <paper-badge id="badgeSuccess{{index}}" label="0" class="green" disabled></paper-badge>
+                    <paper-badge id="badge{{index}}" label="0"></paper-badge>
                     <paper-spinner id="spinner{{index}}" alt="Loading {{item}}" active></paper-spinner>
                     <iron-icon icon="done" id="success{{index}}" class="green" disabled></iron-icon>
                     <iron-icon icon="clear" id="fail{{index}}" class="red" disabled></iron-icon>
@@ -131,14 +126,13 @@
                 if(this.datasets[d.mass]['map'].length>0){
                     this.$$('#success'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
                     this.$$('#fail'+this.masses.indexOf(d.mass)).setAttribute('disabled', "true");
-                    this.$$('#badgeFail'+this.masses.indexOf(d.mass)).setAttribute('disabled', 'true');
-                    this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).label = this.datasets[d.mass].map.length;
-                    this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
+                    this.$$('#badge'+this.masses.indexOf(d.mass)).label = this.datasets[d.mass].map.length;
+                    this.$$('#badge'+this.masses.indexOf(d.mass)).firstElementChild.setAttribute('style', 'background-color: #4caf50;');
                 }else{
                     this.$$('#fail'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
                     this.$$('#success'+this.masses.indexOf(d.mass)).setAttribute('disabled', "true");
-                    this.$$('#badgeFail'+this.masses.indexOf(d.mass)).removeAttribute('disabled');
-                    this.$$('#badgeSuccess'+this.masses.indexOf(d.mass)).setAttribute('disabled', 'true');
+                    this.$$('#badge'+this.masses.indexOf(d.mass)).label = 0;
+                    this.$$('#badge'+this.masses.indexOf(d.mass)).firstElementChild.setAttribute('style', 'background-color: #f44336;');
                 }
                 this.$.xmlOutput.json = this.datasets;
                 var chart = this.$$('pepsweetener-heatmap');
