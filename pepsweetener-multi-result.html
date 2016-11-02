@@ -93,7 +93,7 @@
         </paper-menu>
         <paper-card elevation="0">
             <div class="card-content">
-                <pepsweetener-heatmap data={{datasets.selected}}></pepsweetener-heatmap>
+                <pepsweetener-heatmap id="heatmap" data={{datasets.selected}}></pepsweetener-heatmap>
             </div>
         </paper-card>
     </template>
@@ -110,7 +110,8 @@
                 },
                 datasets: {
                     type: Object,
-                    value: {}
+                    value: {},
+                    observer: '_newSearch'
                 },
                 selected: {
                     type: Number,
@@ -135,13 +136,14 @@
                     this.$$('#badge'+this.masses.indexOf(d.mass)).firstElementChild.setAttribute('style', 'background-color: #f44336;');
                 }
                 this.$.xmlOutput.json = this.datasets;
-                var chart = this.$$('pepsweetener-heatmap');
-                chart.data = this.datasets[d.mass];
+                this.$.heatmap.data = this.datasets[d.mass];
                 this.$.resultsMenu.selected = d.mass;
             },
+            _newSearch: function(){
+                this.$.heatmap.data = [];
+            },
             _datasetSelected: function(newValue) {
-                var chart = this.$$('pepsweetener-heatmap');
-                chart.data = this.datasets[newValue];
+                this.$.heatmap.data = this.datasets[newValue];
             }
         });
     </script>
