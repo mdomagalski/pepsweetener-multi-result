@@ -141,6 +141,8 @@
             },
             _newSearch: function(){
                 this.$.heatmap.data = null;
+                var badges = Polymer.dom(this).querySelectorAll("paper-badge");
+                for (var i in badges) badges[i].label = 0;
             },
             _datasetSelected: function(newValue) {
                 this.$.heatmap.data = this.datasets[newValue];
