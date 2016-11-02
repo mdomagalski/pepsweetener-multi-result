@@ -140,7 +140,7 @@
                 this.$.resultsMenu.selected = d.mass;
             },
             _newSearch: function(){
-                this.$.heatmap.data = [];
+                this.$.heatmap.data = null;
             },
             _datasetSelected: function(newValue) {
                 this.$.heatmap.data = this.datasets[newValue];
